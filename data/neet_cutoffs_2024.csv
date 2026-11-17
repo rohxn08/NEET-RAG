@@ -1,0 +1,62 @@
+College,Course,Category,State,Year,Round,Opening_Rank,Closing_Rank
+AIIMS New Delhi,MBBS,General,Delhi,2024,1,1,52
+AIIMS New Delhi,MBBS,OBC,Delhi,2024,1,53,180
+AIIMS New Delhi,MBBS,SC,Delhi,2024,1,181,620
+AIIMS New Delhi,MBBS,ST,Delhi,2024,1,621,1200
+AIIMS New Delhi,MBBS,EWS,Delhi,2024,1,53,200
+AIIMS Mumbai,MBBS,General,Maharashtra,2024,1,55,310
+AIIMS Mumbai,MBBS,OBC,Maharashtra,2024,1,311,850
+AIIMS Mumbai,MBBS,SC,Maharashtra,2024,1,851,2100
+AIIMS Mumbai,MBBS,ST,Maharashtra,2024,1,2101,3500
+AIIMS Mumbai,MBBS,EWS,Maharashtra,2024,1,310,900
+AIIMS Bhopal,MBBS,General,Madhya Pradesh,2024,1,320,1100
+AIIMS Bhopal,MBBS,OBC,Madhya Pradesh,2024,1,1101,2800
+AIIMS Bhopal,MBBS,SC,Madhya Pradesh,2024,1,2801,5200
+AIIMS Bhopal,MBBS,ST,Madhya Pradesh,2024,1,5201,8000
+AIIMS Bhopal,MBBS,EWS,Madhya Pradesh,2024,1,1100,3000
+AIIMS Jodhpur,MBBS,General,Rajasthan,2024,1,350,1300
+AIIMS Jodhpur,MBBS,OBC,Rajasthan,2024,1,1301,3100
+AIIMS Jodhpur,MBBS,SC,Rajasthan,2024,1,3101,6000
+AIIMS Jodhpur,MBBS,ST,Rajasthan,2024,1,6001,9500
+AIIMS Jodhpur,MBBS,EWS,Rajasthan,2024,1,1300,3200
+AIIMS Rishikesh,MBBS,General,Uttarakhand,2024,1,400,1500
+AIIMS Rishikesh,MBBS,OBC,Uttarakhand,2024,1,1501,3500
+AIIMS Rishikesh,MBBS,SC,Uttarakhand,2024,1,3501,6800
+AIIMS Rishikesh,MBBS,ST,Uttarakhand,2024,1,6801,10500
+AIIMS Rishikesh,MBBS,EWS,Uttarakhand,2024,1,1500,3600
+JIPMER Puducherry,MBBS,General,Puducherry,2024,1,180,700
+JIPMER Puducherry,MBBS,OBC,Puducherry,2024,1,701,1800
+JIPMER Puducherry,MBBS,SC,Puducherry,2024,1,1801,4200
+JIPMER Puducherry,MBBS,ST,Puducherry,2024,1,4201,7000
+JIPMER Puducherry,MBBS,EWS,Puducherry,2024,1,700,1900
+Maulana Azad Medical College,MBBS,General,Delhi,2024,1,650,1800
+Maulana Azad Medical College,MBBS,OBC,Delhi,2024,1,1801,4500
+Maulana Azad Medical College,MBBS,SC,Delhi,2024,1,4501,8500
+Maulana Azad Medical College,MBBS,ST,Delhi,2024,1,8501,13000
+Maulana Azad Medical College,MBBS,EWS,Delhi,2024,1,1800,4600
+Grant Medical College Mumbai,MBBS,General,Maharashtra,2024,1,900,2500
+Grant Medical College Mumbai,MBBS,OBC,Maharashtra,2024,1,2501,6000
+Grant Medical College Mumbai,MBBS,SC,Maharashtra,2024,1,6001,11000
+Grant Medical College Mumbai,MBBS,ST,Maharashtra,2024,1,11001,17000
+Grant Medical College Mumbai,MBBS,EWS,Maharashtra,2024,1,2500,6200
+BJ Medical College Pune,MBBS,General,Maharashtra,2024,1,1100,3000
+BJ Medical College Pune,MBBS,OBC,Maharashtra,2024,1,3001,7000
+BJ Medical College Pune,MBBS,SC,Maharashtra,2024,1,7001,13000
+BJ Medical College Pune,MBBS,ST,Maharashtra,2024,1,13001,20000
+BJ Medical College Pune,MBBS,EWS,Maharashtra,2024,1,3000,7200
+Seth GS Medical College Mumbai,MBBS,General,Maharashtra,2024,1,1200,3200
+Seth GS Medical College Mumbai,MBBS,OBC,Maharashtra,2024,1,3201,7500
+Seth GS Medical College Mumbai,MBBS,SC,Maharashtra,2024,1,7501,14000
+Seth GS Medical College Mumbai,MBBS,ST,Maharashtra,2024,1,14001,21000
+Seth GS Medical College Mumbai,MBBS,EWS,Maharashtra,2024,1,3200,7600
+AIIMS New Delhi,MBBS,General,Delhi,2023,1,1,48
+AIIMS New Delhi,MBBS,OBC,Delhi,2023,1,49,165
+AIIMS New Delhi,MBBS,SC,Delhi,2023,1,166,580
+AIIMS New Delhi,MBBS,ST,Delhi,2023,1,581,1100
+AIIMS Mumbai,MBBS,General,Maharashtra,2023,1,50,290
+AIIMS Mumbai,MBBS,OBC,Maharashtra,2023,1,291,800
+AIIMS Bhopal,MBBS,General,Madhya Pradesh,2023,1,300,1050
+AIIMS Jodhpur,MBBS,General,Rajasthan,2023,1,330,1250
+JIPMER Puducherry,MBBS,General,Puducherry,2023,1,170,680
+Maulana Azad Medical College,MBBS,General,Delhi,2023,1,620,1750
+Grant Medical College Mumbai,MBBS,General,Maharashtra,2023,1,880,2400

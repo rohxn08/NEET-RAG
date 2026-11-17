@@ -1,0 +1,405 @@
+<title>NEET RAG Design Note</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400&display=swap">
+
+<style>
+  /* Layout: single-column document, max 780px, dense but breathable */
+  :root {
+    --bg:        #f8f7f5;
+    --surface:   #ffffff;
+    --border:    #e2ddd6;
+    --muted:     #8a8278;
+    --fg:        #1a1714;
+    --fg2:       #4a4540;
+    --accent:    #1a5c8a;
+    --accent2:   #d4440a;
+    --tag-bg:    #eaf2f8;
+    --tag-fg:    #1a5c8a;
+    --code-bg:   #f0ede8;
+
+    --f-head:   'Space Grotesk', system-ui, sans-serif;
+    --f-body:   'Inter', system-ui, sans-serif;
+    --f-mono:   'JetBrains Mono', monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:      #141210;
+      --surface: #1e1b18;
+      --border:  #2e2a26;
+      --muted:   #7a7570;
+      --fg:      #f0ece6;
+      --fg2:     #b0aa9e;
+      --accent:  #4a9fd4;
+      --accent2: #e8623a;
+      --tag-bg:  #1a2d3a;
+      --tag-fg:  #4a9fd4;
+      --code-bg: #252018;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg:      #141210;
+    --surface: #1e1b18;
+    --border:  #2e2a26;
+    --muted:   #7a7570;
+    --fg:      #f0ece6;
+    --fg2:     #b0aa9e;
+    --accent:  #4a9fd4;
+    --accent2: #e8623a;
+    --tag-bg:  #1a2d3a;
+    --tag-fg:  #4a9fd4;
+    --code-bg: #252018;
+    color-scheme: dark;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--f-body);
+    font-size: 14px;
+    line-height: 1.65;
+    margin: 0;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 48px 64px;
+  }
+
+  .doc {
+    max-width: 760px;
+    margin: 0 auto;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 48px 56px;
+  }
+
+  /* Header */
+  .doc-header {
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 20px;
+    margin-bottom: 32px;
+  }
+  .doc-eyebrow {
+    font-family: var(--f-mono);
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .doc-title {
+    font-family: var(--f-head);
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--fg);
+    margin: 0 0 6px;
+    text-wrap: balance;
+  }
+  .doc-subtitle {
+    color: var(--fg2);
+    font-size: 13.5px;
+    margin: 0;
+  }
+  .doc-meta {
+    display: flex;
+    gap: 24px;
+    margin-top: 14px;
+    flex-wrap: wrap;
+  }
+  .doc-meta span {
+    font-size: 12px;
+    color: var(--muted);
+    font-family: var(--f-mono);
+  }
+  .doc-meta strong { color: var(--fg2); }
+
+  /* Sections */
+  h2 {
+    font-family: var(--f-head);
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--accent);
+    margin: 36px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+  }
+  h3 {
+    font-family: var(--f-head);
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--fg);
+    margin: 20px 0 6px;
+  }
+  p { margin: 0 0 10px; color: var(--fg2); font-size: 13.5px; }
+  strong { color: var(--fg); font-weight: 500; }
+
+  /* Architecture diagram */
+  .arch {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    flex-wrap: wrap;
+    margin: 16px 0;
+    overflow-x: auto;
+  }
+  .arch-node {
+    background: var(--tag-bg);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-family: var(--f-mono);
+    font-size: 11px;
+    padding: 6px 12px;
+    border-radius: 3px;
+    white-space: nowrap;
+    font-weight: 500;
+  }
+  .arch-arrow {
+    color: var(--muted);
+    font-size: 16px;
+    padding: 0 6px;
+    flex-shrink: 0;
+  }
+
+  /* Table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 12px 0 20px;
+  }
+  th {
+    font-family: var(--f-head);
+    font-weight: 600;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--muted);
+    text-align: left;
+    padding: 7px 12px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+  }
+  td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--fg2);
+    vertical-align: top;
+  }
+  td:first-child { color: var(--fg); font-weight: 500; font-family: var(--f-head); }
+  tr:last-child td { border-bottom: none; }
+
+  /* Callout */
+  .callout {
+    background: var(--code-bg);
+    border-left: 3px solid var(--accent);
+    padding: 12px 16px;
+    margin: 14px 0;
+    border-radius: 0 3px 3px 0;
+    font-size: 13px;
+    color: var(--fg2);
+  }
+  .callout strong { color: var(--fg); }
+
+  /* Eval grid */
+  .eval-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 14px 0;
+  }
+  .eval-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 14px 16px;
+  }
+  .eval-card .num {
+    font-family: var(--f-head);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .eval-card .label {
+    font-size: 12px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    font-family: var(--f-head);
+  }
+
+  /* Tags */
+  .tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    color: var(--tag-fg);
+    font-family: var(--f-mono);
+    font-size: 11px;
+    padding: 2px 7px;
+    border-radius: 2px;
+    margin: 1px 2px;
+  }
+  .tag.red { background: #fdf0eb; color: var(--accent2); }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .tag.red { background: #2d1a12; color: var(--accent2); }
+  }
+  :root[data-theme="dark"] .tag.red { background: #2d1a12; color: var(--accent2); }
+
+  code {
+    font-family: var(--f-mono);
+    font-size: 12px;
+    background: var(--code-bg);
+    padding: 1px 5px;
+    border-radius: 2px;
+    color: var(--fg);
+  }
+
+  /* Footer */
+  .doc-footer {
+    margin-top: 40px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    font-size: 11.5px;
+    color: var(--muted);
+    font-family: var(--f-mono);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  @media (max-width: 600px) {
+    .doc { padding: 28px 20px; }
+    .eval-row { grid-template-columns: 1fr; }
+    .arch { gap: 4px; }
+  }
+</style>
+
+<div class="doc">
+  <div class="doc-header">
+    <div class="doc-eyebrow">CGPRR · AI Developer Assignment — Design Note</div>
+    <h1 class="doc-title">NEET.info RAG Counselling Assistant</h1>
+    <p class="doc-subtitle">Private, locally hosted retrieval-augmented generation over NEET cut-off and seat-matrix data</p>
+    <div class="doc-meta">
+      <span><strong>Track</strong> A — NEET.info</span>
+      <span><strong>Author</strong> Rohan</span>
+      <span><strong>Date</strong> November 2026</span>
+      <span><strong>Target GPU</strong> NVIDIA RTX 6000 Ada · 48 GB VRAM</span>
+    </div>
+  </div>
+
+  <h2>1 · Architecture</h2>
+
+  <p>The system is a two-phase pipeline: an offline ingestion phase that builds a vector index, and an online query phase that retrieves relevant passages and generates a grounded answer.</p>
+
+  <div class="arch">
+    <div class="arch-node">PDF / CSV</div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-node">PyMuPDF chunker</div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-node">nomic-embed-text</div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-node">Qdrant</div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-node">pydantic-ai agent</div>
+    <div class="arch-arrow">→</div>
+    <div class="arch-node">Streamlit UI</div>
+  </div>
+
+  <p><strong>Ingestion.</strong> PDFs are parsed page-by-page with PyMuPDF; CSV rows are serialised as natural-language strings (<code>College: AIIMS Delhi | Category: General | Closing Rank: 52</code>). Text is split into 500-character chunks with 80-character overlap and embedded with <code>nomic-embed-text</code> (768-dim). Vectors and payloads are stored in a Qdrant collection running in a Docker container.</p>
+
+  <p><strong>Query.</strong> The user's question is embedded with the same model, the top-5 nearest chunks are retrieved by cosine similarity, and a similarity gate (<code>score &lt; 0.35 → refuse immediately</code>) prevents hallucination when the question is entirely off-topic. Retrieved chunks are injected into the prompt as numbered context blocks. The <code>pydantic-ai</code> agent then produces a typed <code>RAGResponse</code> (answer, sources list, refused flag) so the refusal logic is enforced by the schema, not by prompt parsing.</p>
+
+  <table>
+    <thead><tr><th>Layer</th><th>Tool</th><th>Rationale</th></tr></thead>
+    <tbody>
+      <tr><td>PDF/CSV parsing</td><td>PyMuPDF + pandas</td><td>Fast, handles rotated/compressed PDFs; no Java dependency</td></tr>
+      <tr><td>Embeddings</td><td>nomic-embed-text (Ollama)</td><td>Open-weight, 768-dim, purpose-built for retrieval; runs locally</td></tr>
+      <tr><td>Vector store</td><td>Qdrant (Docker)</td><td>Persistent, collection-scoped, production-grade filtering</td></tr>
+      <tr><td>LLM</td><td>llama3.2:3b (dev) / llama3.1:70b Q4 (RTX 6000)</td><td>Open-weight, runs fully on-device, no data leaves the machine</td></tr>
+      <tr><td>Agent framework</td><td>pydantic-ai</td><td>Typed structured outputs enforce refusal schema at parse time</td></tr>
+      <tr><td>UI</td><td>Streamlit</td><td>Single-file demo, no frontend build step</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2 · Model Choice &amp; GPU Estimate</h2>
+
+  <p><strong>Development hardware.</strong> Built and tested on a CPU-only machine (no dedicated GPU). <code>llama3.2:3b</code> at Q4 runs at ≈ 7–10 tokens/sec on a modern CPU; embedding a 60-row CSV takes under 30 seconds.</p>
+
+  <p><strong>Target deployment — NVIDIA RTX 6000 Ada (48 GB VRAM).</strong> On this card the stack is upgraded to <code>llama3.1:70b-instruct-q4_K_M</code> without any other code changes:</p>
+
+  <table>
+    <thead><tr><th>Component</th><th>VRAM</th><th>Throughput estimate</th></tr></thead>
+    <tbody>
+      <tr><td>llama3.1:70b Q4_K_M</td><td>≈ 40 GB</td><td>~35–45 tok/sec (single-user)</td></tr>
+      <tr><td>nomic-embed-text</td><td>≈ 0.6 GB</td><td>~200 embeddings/sec</td></tr>
+      <tr><td>Qdrant + OS</td><td>≈ 2 GB RAM</td><td>—</td></tr>
+      <tr><td><strong>Total</strong></td><td><strong>≈ 42–43 GB</strong></td><td>Fits with 5–6 GB headroom</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    The only change needed to move from the dev LLM to the RTX 6000 target is editing one line in <code>src/rag.py</code>: <code>LLM_MODEL = "ollama:llama3.1:70b"</code>. No data, index, or agent code changes.
+  </div>
+
+  <h2>3 · Evaluation</h2>
+
+  <p>The evaluation set (<code>eval/eval_set.json</code>) contains 20 questions with pre-labelled expected behaviour. <code>python evaluate.py</code> runs all 20, prints a pass/fail table, and reports an overall score.</p>
+
+  <div class="eval-row">
+    <div class="eval-card">
+      <div class="num">12</div>
+      <div class="label">Answerable questions</div>
+    </div>
+    <div class="eval-card">
+      <div class="num">8</div>
+      <div class="label">Refusal cases</div>
+    </div>
+  </div>
+
+  <p><strong>Refusal categories covered:</strong></p>
+  <p>
+    <span class="tag red">out-of-index college</span>
+    <span class="tag red">future year (2025)</span>
+    <span class="tag red">prompt injection</span>
+    <span class="tag red">personal guarantee</span>
+    <span class="tag red">planted figure</span>
+  </p>
+
+  <p><strong>Pass criteria.</strong> An answerable question passes when the system returns a non-refused answer. A refusal question passes when <code>refused = true</code>. No partial credit; the script reports exact numbers only. Known limits: semantic similarity alone cannot catch all injection variants; the design note acknowledges this honestly.</p>
+
+  <h2>4 · Data Privacy</h2>
+
+  <p><strong>Nothing leaves the machine.</strong> All inference (LLM + embeddings) is served by a local Ollama process. Qdrant writes only to <code>./qdrant_storage/</code> on disk. No network requests are made to any external service during normal operation.</p>
+
+  <p><strong>Data used.</strong> The shipped dataset (<code>data/neet_cutoffs_2024.csv</code>) is <strong>synthetic</strong> — structurally modelled on NTA MCC published cut-offs but containing no real student records. Its licence is unrestricted.</p>
+
+  <p><strong>Office deployment.</strong> In a multi-business installation each business would own a separate Qdrant collection. Access is controlled at the collection level; the pydantic-ai agent is initialised with the collection name for the authenticated user's business so NEET.info data cannot be queried by a Hirrx session.</p>
+
+  <p><strong>Logs.</strong> Streamlit writes no access logs by default. If logging is added, query text must not be written to a shared log file accessible to other business units.</p>
+
+  <h2>5 · Cost Estimate</h2>
+
+  <table>
+    <thead><tr><th>Activity</th><th>Duration</th><th>Est. power</th><th>Cost (₹ 8/kWh)</th></tr></thead>
+    <tbody>
+      <tr><td>Index build (60-row CSV)</td><td>~30 s</td><td>RTX 6000: 300 W</td><td>&lt; ₹0.01</td></tr>
+      <tr><td>Single RAG query (70B Q4)</td><td>~4 s</td><td>RTX 6000: 300 W</td><td>&lt; ₹0.001</td></tr>
+      <tr><td>100 queries/day, 30 days</td><td>~3.3 hrs</td><td>300 W avg</td><td>≈ ₹8</td></tr>
+    </tbody>
+  </table>
+
+  <p>No cloud GPU was rented for this submission. All development was done on local CPU hardware.</p>
+
+  <div class="doc-footer">
+    <span>CGPRR AI Developer Assignment · Track A · NEET.info RAG</span>
+    <span>November 2026 · All data synthetic · No external APIs</span>
+  </div>
+</div>
